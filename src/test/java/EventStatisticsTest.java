@@ -4,9 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.TimeConstants;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -76,23 +73,18 @@ class EventStatisticsTest {
     }
 
     @Test
-    void addEventMultiTread() throws InterruptedException {
-        int eventNum = 10000;
+    void addEventMultiTreadAsync() throws InterruptedException {
+        int eventNum = 10_000_000;
         int threadNum = 10;
 
         ExecutorService threadPool = Executors.newFixedThreadPool(threadNum);
 
-        Collection<Callable<Boolean>> list = new ArrayList<>();
         for (int i = 0; i < eventNum; i++) {
-            list.add(() -> {
-                eventStatistics.addEvent(System.currentTimeMillis());
-                return true;
-            });
+            threadPool.submit(() -> eventStatistics.addEvent(System.currentTimeMillis()));
         }
-        threadPool.invokeAll(list);
 
         threadPool.shutdown();
-        final boolean done = threadPool.awaitTermination(1, TimeUnit.MINUTES);
+        boolean done = threadPool.awaitTermination(1, TimeUnit.MINUTES);
         assertTrue(done);
         assertEquals(eventNum, eventStatistics.getEventCountInLastMinute());
     }
