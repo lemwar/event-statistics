@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class EventStatisticsTest {
-
     private IEventStatistics eventStatistics;
     private long currentTime;
 
@@ -38,37 +37,40 @@ class EventStatisticsTest {
     @Test
     void addEventInMinuteTest() {
         eventStatistics.addEvent(currentTime);
-        eventStatistics.addEvent(currentTime - (TimeConstants.MILLISECONDS_IN_MINUTE / 2));
+        eventStatistics.addEvent(currentTime - (TimeConstants.MILLISECONDS_IN_MINUTE / 2L));
         assertEquals(2, eventStatistics.getEventCountInLastMinute());
     }
 
     @Test
     void addEventMoreThanMinuteTest() {
-        eventStatistics.addEvent(currentTime - (TimeConstants.MILLISECONDS_IN_MINUTE + 1000));
+        eventStatistics.addEvent(currentTime -
+                (TimeConstants.MILLISECONDS_IN_MINUTE + TimeConstants.MILLISECONDS_IN_SECOND));
         assertEquals(0, eventStatistics.getEventCountInLastMinute());
     }
 
     @Test
     void addEventInHourTest() {
-        eventStatistics.addEvent(System.currentTimeMillis() - (TimeConstants.MILLISECONDS_IN_HOUR / 2));
+        eventStatistics.addEvent(System.currentTimeMillis() - (TimeConstants.MILLISECONDS_IN_HOUR / 2L));
         assertEquals(1L, eventStatistics.getEventCountInLastHour());
     }
 
     @Test
     void addEventMoreThanHourTest() {
-        eventStatistics.addEvent(System.currentTimeMillis() - (TimeConstants.MILLISECONDS_IN_HOUR + 1000));
+        eventStatistics.addEvent(System.currentTimeMillis() -
+                (TimeConstants.MILLISECONDS_IN_HOUR + TimeConstants.MILLISECONDS_IN_SECOND));
         assertEquals(0L, eventStatistics.getEventCountInLastHour());
     }
 
     @Test
     void addEventInDayTest() {
-        eventStatistics.addEvent(System.currentTimeMillis() - (TimeConstants.MILLISECONDS_IN_DAY / 2));
+        eventStatistics.addEvent(System.currentTimeMillis() - (TimeConstants.MILLISECONDS_IN_DAY / 2L));
         assertEquals(1L, eventStatistics.getEventCountInLastDay());
     }
 
     @Test
     void addEventMoreThanDayTest() {
-        eventStatistics.addEvent(System.currentTimeMillis() - (TimeConstants.MILLISECONDS_IN_DAY + 1000));
+        eventStatistics.addEvent(System.currentTimeMillis() -
+                (TimeConstants.MILLISECONDS_IN_DAY + TimeConstants.MILLISECONDS_IN_SECOND));
         assertEquals(0L, eventStatistics.getEventCountInLastDay());
     }
 
