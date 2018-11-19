@@ -15,22 +15,26 @@ public class EventStatistics implements IEventStatistics {
         events = new ConcurrentHashMap<>();
     }
 
+    @Override
     public void addEvent(long eventTime) {
         events.compute(eventTime, (time, count) -> count == null ? 1 : ++count);
     }
 
+    @Override
     public long getEventCountInLastMinute() {
         long currentTime = System.currentTimeMillis();
         long startTime = currentTime - TimeConstants.MILLISECONDS_IN_MINUTE;
         return getEventCountInTimePeriod(startTime, currentTime);
     }
 
+    @Override
     public long getEventCountInLastHour() {
         long currentTime = System.currentTimeMillis();
         long startTime = currentTime - TimeConstants.MILLISECONDS_IN_HOUR;
         return getEventCountInTimePeriod(startTime, currentTime);
     }
 
+    @Override
     public long getEventCountInLastDay() {
         long currentTime = System.currentTimeMillis();
         long startTime = currentTime - TimeConstants.MILLISECONDS_IN_DAY;
